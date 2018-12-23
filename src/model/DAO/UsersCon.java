@@ -42,4 +42,52 @@ public class UsersCon implements UsersDAO
         }
         return list;
     }
+    @Override
+    public int Insert(Users user)
+    {
+        Connection con=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        int result=0;
+        try
+        {
+            con= MyJdbc.getConnection();
+            String sql="INSERT INTO dbo.users(username,pwd,address,phone) VALUES (?,?,?,?)";
+            ps=con.prepareStatement(sql);
+            ps.setString(1,user.getUsername());
+            ps.setString(2,user.getPwd());
+            ps.setString(3,user.getAddress());
+            ps.setString(4,user.getPhone());
+            result=ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    @Override
+    public int Update(Users user)
+    {
+        Connection con=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        int result=0;
+        try
+        {
+            con= MyJdbc.getConnection();
+            String sql="UPDATE dbo.users SET pwd=?,address=?,phone=? where username=?";
+            ps=con.prepareStatement(sql);
+            ps.setString(1,user.getPwd());
+            ps.setString(2,user.getAddress());
+            ps.setString(3,user.getPhone());
+            ps.setString(4,user.getUsername());
+            result=ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
