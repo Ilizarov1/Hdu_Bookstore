@@ -1,4 +1,5 @@
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.Books" %><%--
   Created by IntelliJ IDEA.
   User: zjzjn
   Date: 2018/12/22
@@ -17,35 +18,27 @@
         <th>ISBN</th>
         <th>书名</th>
         <th>价格</th>
-        <th>数量</th>
         <th>操作</th>
     </tr>
 <%
-    ArrayList<String> cartInfo=(ArrayList<String>)request.getSession().getAttribute("cartInfo");
-    ArrayList<String> names=new ArrayList<>();
-    ArrayList<String> ISBNs=new ArrayList<>();
+    ArrayList<Books> cartList=(ArrayList<Books>)request.getSession().getAttribute("cartList");
     ArrayList<Float> prices=new ArrayList<>();
-    ArrayList<Integer> counts=new ArrayList<>();
-    if(cartInfo!=null)
+    if(cartList!=null)
     {
-        for(int i=0;i<cartInfo.size();i++)
+
+        for(int i=0;i<cartList.size();i++)
         {
-            String info[]=cartInfo.get(i).split("#");
-            ISBNs.add(info[0]);
-            names.add(info[1]);
-            prices.add(Float.parseFloat(info[2]));
-            counts.add(Integer.parseInt(info[3]));
+            Books abook=cartList.get(i);
+            prices.add(abook.getPrice());
             out.print("<tr>");
-            out.print("<td>"+ISBNs.get(i));
+            out.print("<td>"+abook.getIsbn());
             out.print("</td>");
-            out.print("<td>"+names.get(i));
+            out.print("<td>"+abook.getBookname());
             out.print("</td>");
-            out.print("<td>"+prices.get(i));
-            out.print("</td>");
-            out.print("<td>"+counts.get(i));
+            out.print("<td>"+abook.getPrice());
             out.print("</td>");
             out.print("<td>");
-            out.print("<input type=\"hidden\" value=\""+cartInfo.get(i)+"\" name=\"remove\" form=\"delete\">");
+            out.print("<input type=\"hidden\" value=\""+abook.getIsbn()+"\" name=\"remove\" form=\"delete\">");
             out.print("<input type=\"submit\" value=\"删除\" form=\"delete\" ");
             out.print("</td>");
             out.print("</tr>");
@@ -59,7 +52,7 @@
     float sum=0;
     for(int i=0;i<prices.size();i++)
     {
-        sum+=prices.get(i)*counts.get(i);
+        sum+=prices.get(i);
     }
     out.print("总价格："+sum);
 %>

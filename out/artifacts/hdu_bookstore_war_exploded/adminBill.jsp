@@ -1,5 +1,7 @@
 <%@ page import="model.Orders" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.Books" %>
+<%@ page import="model.DAO.BooksCon" %><%--
   Created by IntelliJ IDEA.
   User: zjzjn
   Date: 2018/12/23
@@ -22,6 +24,7 @@
     </tr>
     <%
         ArrayList<Orders> ordersList=(ArrayList<Orders>)request.getSession().getAttribute("ordersList");
+        BooksCon bc=new BooksCon();
         for(int i=0;i<ordersList.size();i++)
         {
             String isdealt="发货中...";
@@ -30,19 +33,18 @@
             {
                 isdealt="订单已完成";
             }
-            String[] contents=order.getContent().split("\\|");
             out.print("<tr>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>");
             out.print(order.getId());
             out.print("</td>");
-            out.print("<td>"+contents[0]+"</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>"+bc.SelectByIsbn(order.getIsbn()).getBookname()+"</td>");
+            out.print("<td>");
             out.print(order.getUsername());
             out.print("</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>");
             out.print(isdealt);
             out.print("</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>");
             if(order.getIsdealt()==1)
             {
                 out.print("<a href=\"#\">无</a>");
@@ -55,12 +57,6 @@
 
             out.print("</td>");
             out.print("</tr>");
-            for(int j=1;j<contents.length;j++)
-            {
-                out.print("<tr>");
-                out.print("<td>"+contents[j]+"</td>");
-                out.print("</tr>");
-            }
         }
     %>
 </table>

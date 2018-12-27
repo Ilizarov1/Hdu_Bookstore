@@ -1,6 +1,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.Orders" %>
-<%@ page import="model.Users" %><%--
+<%@ page import="model.Users" %>
+<%@ page import="model.DAO.BooksCon" %><%--
   Created by IntelliJ IDEA.
   User: zjzjn
   Date: 2018/12/22
@@ -25,6 +26,7 @@
     <%
         ArrayList<Orders> orderList=(ArrayList<Orders>)request.getSession().getAttribute("orderList");
         Users user=(Users)request.getSession().getAttribute("user");
+        BooksCon bc=new BooksCon();
         for(int i=0;i<orderList.size();i++)
         {
             String isdealt="发货中...";
@@ -33,22 +35,20 @@
             {
                 isdealt="订单已完成";
             }
-            String[] contents=order.getContent().split("\\|");
             out.print("<tr>");
-            out.print("<td rowspan=\""+contents.length+"\">");
-            out.print(order.getId());
+            out.print("<td>"+order.getId());
             out.print("</td>");
-            out.print("<td>"+contents[0]+"</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>"+bc.SelectByIsbn(order.getIsbn()).getBookname()+"</td>");
+            out.print("<td>");
             out.print(user.getAddress());
             out.print("</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>");
             out.print(user.getPhone());
             out.print("</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>");
             out.print(isdealt);
             out.print("</td>");
-            out.print("<td rowspan=\""+contents.length+"\">");
+            out.print("<td>");
             if(order.getIsdealt()==1)
             {
                 out.print("<a href=\"/commentTurn?orderid="+order.getId()+"\">评论</a>");
@@ -61,12 +61,6 @@
 
             out.print("</td>");
             out.print("</tr>");
-            for(int j=1;j<contents.length;j++)
-            {
-                out.print("<tr>");
-                out.print("<td>"+contents[j]+"</td>");
-                out.print("</tr>");
-            }
         }
     %>
 </table>
